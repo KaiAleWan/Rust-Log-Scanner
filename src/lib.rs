@@ -23,7 +23,7 @@ pub fn read_log(file_path: &str) -> String {
 /// 
 /// # Returns
 /// `Vec<String>`: A vector with warning and error messages
-pub fn extract_warnings_and_errors(text: &String) ->  Vec<String> {
+pub fn extract_warnings_and_errors(text: &str) ->  Vec<String> {
     let input: Vec<&str> = text.split('\n').collect();
     let mut output: Vec<String> = vec![];
     for s in input {
@@ -37,7 +37,7 @@ pub fn extract_warnings_and_errors(text: &String) ->  Vec<String> {
 
 /// Prints the contents of a Vec<String> to the console. 
 pub fn present_output(messages: &Vec<String>) {
-    if messages.len() > 0 {
+    if !messages.is_empty() {
         for message in messages {
             println!("{}", message);
         }
@@ -55,12 +55,12 @@ pub fn present_output(messages: &Vec<String>) {
 pub fn save_output(filename: &str, messages: &Vec<String>) {
     let file_path = format!("./output/{}.txt", filename);
     let mut file = File::create(file_path).unwrap();
-    if messages.len() > 0 {
+    if !messages.is_empty() {
         for message in messages {
-            file.write(message.as_bytes()).unwrap();
+            file.write_all(message.as_bytes()).unwrap();
         }
     } else {
-       file.write(b"No issues were found in the log file.").unwrap(); 
+       file.write_all(b"No issues were found in the log file.").unwrap(); 
     }
 }
 
