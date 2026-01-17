@@ -24,17 +24,17 @@ enum Commands {
 #[post("/process")]
 async fn process_log(log_data: web::Bytes) -> HttpResponse {
     let log_path = String::from_utf8(log_data.to_vec()).unwrap_or_else(|_| "Invalid UTF-8".to_string());
-    let output = scan_log_file(&log_path);
+    scan_log_file(&log_path);
     HttpResponse::Ok()
         .content_type("text/plain")
-        .body(output)
+        .body(())
 }
 
-fn run_as_cli(log_data: &String) {
+fn run_as_cli(log_data: &str) {
     scan_log_file(log_data);
 }
 
-fn scan_log_file(path: &String) {
+fn scan_log_file(path: &str) {
     let log_file = read_file(path);
     let undesired_notes = read_file("./input/undesired_notes.txt");
     let messages = extract_messages(&log_file, &undesired_notes);
